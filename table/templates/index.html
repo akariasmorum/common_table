@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{% load static %}
+		<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" crossorigin="anonymous">
+	<style>
+		.no-border {
+			border: 0;
+			box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+		}
+		.input-group-custom{
+			border: 1px;			
+		}
+		.custom-input-group {
+			margin: 5px 0px;
+			padding: 3px 5px;
+			border-radius: 5px;
+		}
+		.custom-input{
+			width: 100%;
+			margin:0px;
+		}
+		.table_form{
+			
+		}
+	</style>
+	</head>
+	
+	<body>
+		<div class='container'>
+		
+			{% if table %}
+				<table class='table'>
+					<thead class="thead-dark">
+						<tr>
+							{% for key in table.0 %}
+								<th scope="col">{{ key }}</th>
+							{% endfor %}
+						</tr>
+					 </thead>
+					 <tbody>
+						{% for row_t in table %}
+							<tr>
+								{% for key, value in row_t.items %}
+									<td>{{ value }}</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% endif %}
+			
+			<a href = '/download'>
+				<button class='button' action=''>Download</button>
+			</a>	
+			
+			{% if form %}
+				<form class='table_form' method='POST'>
+					{% csrf_token %}
+					{% for field in form.visible_fields %}
+						<div class="custom-input-group border border-primary">
+								<label for='id_{{ field.name }}' class='custom-input'>
+									<small class="text-muted">{{ field.label }}</small>
+									<div>
+										{{ field }}
+									</div>
+								</label>
+								
+						</div>
+						{% for error in field.errors %}
+							<strong class = 'text-warning' >{{ error }}</strong>
+						{% endfor %}
+					{% endfor %}
+					<button type="submit"  class="btn btn-primary">Отправить</button>
+				</form>
+			{% endif %}
+		</div>
+	</body>
+</html>
